@@ -1,0 +1,15 @@
+.notFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  justify-content: center;
+}
+.notfoundImg {
+  width: 250px;
+  height: 250px;
+}
+.notFoundHeading {
+  color: #000000;
+  font-size: 35px;
+}

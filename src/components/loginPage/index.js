@@ -1,5 +1,7 @@
 import {Component} from 'react'
 
+import {Redirect} from 'react-router-dom'
+
 import Cookies from 'js-cookie'
 
 import './index.css'
@@ -18,16 +20,16 @@ class Login extends Component {
     }
     const response = await fetch(url, options)
     console.log(response)
+    const data = await response.json()
     if (response.ok === true) {
-      const data = await response.json()
       console.log(data)
       const jwtToken = data.jwt_token
       console.log(jwtToken)
-      Cookies.set('jwtToken', jwtToken, {expires: 30})
+      Cookies.set('jwt_token', jwtToken, {expires: 30})
       const {history} = this.props
       history.replace('/')
     } else {
-      this.setState({error: true, errorMsg: response.error_msg})
+      this.setState({error: true, errorMsg: data.error_msg})
     }
   }
 
@@ -40,7 +42,11 @@ class Login extends Component {
   }
 
   render() {
-    const {userId, pin, error, errorMsg} = this.state
+    const {error, errorMsg} = this.state
+    const jwtToken = Cookies.get('jwt_token')
+    if (jwtToken !== undefined) {
+      return <Redirect to="/" />
+    }
     return (
       <div className="loginMainContainer">
         <div className="loginInsideContainer">
@@ -76,6 +82,7 @@ class Login extends Component {
             <button type="submit" className="loginButton">
               Login
             </button>
+            {error ? <p className="errorPara">*{errorMsg}</p> : null}
           </form>
         </div>
       </div>
